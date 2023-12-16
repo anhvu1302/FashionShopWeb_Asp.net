@@ -1,0 +1,99 @@
+﻿@model IEnumerable<FashionShopWeb.Areas.Admin.ViewModel.BranchVM>
+
+@{
+    ViewBag.Title = "GetAllBranch";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="activity" id="products">
+    <div class="title">
+        <i class="uil uil-package"></i>
+        <span class="text">Các chi nhánh</span>
+    </div>
+    <div class="activity-data">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <td colspan="8">
+                        @using (Html.BeginForm("GetAllBranch", "Branch", FormMethod.Post, new { id = "product-search-form" }))
+                        {
+                            <select class="form-select" name="brSearchType" id="br-search-type" required>
+                                <option value="name">Tìm theo tên</option>
+                            </select>
+                            <input class="form-control" type="text" placeholder="Tìm kiếm..." name="brSearchInput" id="br-search-input" required>
+                            <button type="submit" class="btn btn-light" id="btn-search-br">
+                                <i class="fa fa-search" style="color: #3557ff;"></i>
+                                Tìm kiếm
+                            </button>
+                        }
+                    </td>
+
+                </tr>
+            </thead>
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Tên
+                        <div>
+                            <a href="@Url.Action("GetAllBranch","Branch", new { sortCol = "name",sortType = "DESC", page = ViewBag.Page})" class="fa fa-solid fa-sort-up"></a>
+                            <a href="@Url.Action("GetAllBranch","Branch", new { sortCol = "name",sortType = "ASC", page = ViewBag.Page})" class="fa fa-solid fa-sort-down"></a>
+                        </div>
+                    </th>
+                    <th>
+                        Địa chỉ
+                    </th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody id="product-table-body">
+                @{ int stt = ViewBag.STT;}
+                @foreach (var item in Model)
+                {
+
+                    <tr>
+                        <td>@(stt++)</td>
+                        <td>@item.Branch.TenChiNhanh </td>
+                        <td>@item.Branch.DiaChi </td>
+                        <td>
+                            <button type="button" class="edit-br-btn" data-product-id="@item.Branch.IdChiNhanh"><i class="fa fa-wrench"></i></button>
+                            <button type="button" class="delete-br-btn" data-product-id="@item.Branch.IdChiNhanh"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    @if (ViewBag.NoOfPages > 1)
+    {
+        <div class="break-page">
+            @{
+                int PrevPage = ViewBag.Page - 1;
+                if (PrevPage <= 0)
+                {
+                    PrevPage = 1;
+                }
+                int NextPage = ViewBag.Page + 1;
+                if (NextPage >= ViewBag.NoOfPages)
+                {
+                    NextPage = ViewBag.NoOfPages;
+                }
+            }
+            <div><a class="buttons prev-button" href="@Url.Action("GetAllBranch","Branch")/?page=@PrevPage">&lt;&lt;</a></div>
+            @for (int i = 0; i < ViewBag.NoOfPages; i++)
+            {
+                if (i + 1 == ViewBag.Page)
+                {
+                    <div>
+                        <a href="@Url.Action("GetAllBranch","Branch")/?page=@(i+1)" class="buttons active">@(i+1)</a>
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        <a href="@Url.Action("GetAllBranch","Branch")/?page=@(i+1)" class="buttons">@(i+1)</a>
+                    </div>
+                }
+            }
+            <div><a class="buttons next-button" href="@Url.Action("GetAllBranch","Branch")/?page=@NextPage">&gt;&gt;</a></div>
+        </div>
+    }
+</div>

@@ -1,0 +1,93 @@
+﻿@model FashionShopWeb.Models.WeatherData
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Anh Vũ Weather</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Content/css/weather.css" />
+</head>
+
+
+<body class="bg-dark">
+    <div class="container hieght-full">
+        <div class="weather">
+            <div class="weather__content text-center">
+                <h1 class="title">Weather App</h1>
+                @if (Model.Current != null && Model.Location != null)
+                {
+                    <section class="search">
+                        <h1 class="place" id="place">@Model.Location.Region</h1>
+                        <h2 class="country" id="country">@Model.Location.Country</h2>
+                        <p class="temperature" id="temperature">@Model.Current.Temperature &deg;C</p>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-4">
+                                    <i class="fa fa-wind icon"></i>
+                                    <p class="result" id="wind">@Model.Current.WindSpeed</p>
+                                </div>
+                                <div class="col-4">
+                                    <i class="fa fa-cloud-rain icon"></i>
+                                    <p class="result" id="rain">@Model.Current.Precip</p>
+                                </div>
+                                <div class="col-4">
+                                    <i class="fa fa-cloud icon"></i>
+                                    <p class="result" id="cloud">@Model.Current.Cloudcover</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <form action="@Url.Action("WeatherApp","Weather")" class="form-search container">
+                                <div class="input-group mb-3">
+                                    <input type="text" name="address" class="form-control input-search" placeholder="Vị Trí"
+                                           aria-label="Recipient's username" aria-describedby="basic-addon2" />
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary btn-search" type="submit" id="search">
+                                            Tìm Kiếm
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                }
+                else
+                {
+                    <section class="not-search">
+                        <div>
+                            <form action="@Url.Action("WeatherApp","Weather")" class="form-search container">
+                                <div class="input-group mb-3">
+                                    <input type="text" name="location" class="form-control input-search" placeholder="Vị Trí"
+                                           aria-label="Recipient's username" aria-describedby="basic-addon2" />
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary btn-search" type="submit" id="search">
+                                            Tìm Kiếm
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+
+</html>
+

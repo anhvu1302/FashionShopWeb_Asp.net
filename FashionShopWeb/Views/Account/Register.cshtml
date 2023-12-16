@@ -1,0 +1,52 @@
+﻿
+@model FashionShopWeb.ViewModels.LoginUserVM
+
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { id = "register-form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <h1>Tạo tài khoản</h1>
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+    @Html.EditorFor(model => model.TenTaiKhoan, new { htmlAttributes = new { @class = "form-control", @placeholder = "Tên tài khoản"} })
+    @Html.ValidationMessageFor(model => model.TenTaiKhoan, "", new { @class = "text-danger" })
+
+    @Html.EditorFor(model => model.MatKhau, new { htmlAttributes = new { @class = "form-control", @placeholder = "Mật khẩu" } })
+    @Html.ValidationMessageFor(model => model.MatKhau, "", new { @class = "text-danger" })
+
+    @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control", @placeholder = "Nhập lại mật khẩu" } })
+    @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+
+    <span class="text-danger TB">@ViewBag.TB</span>
+
+    <button type="" onclick="loadTB();">Đăng ký</button>
+}
+
+
+<script>
+
+    function submitForm() {
+        var username = $("#ttk").val();
+        var password = $("#mk").val();
+        var password = $("#rmk").val();
+        $.ajax({
+            type: "POST",
+            url: "Register", // Đường dẫn đến trang xử lý đăng nhập
+            data: { username: username, password: password },
+            success: function (response) {
+                // Xử lý kết quả trả về từ trang xử lý
+                if (response.success) {
+                    // Đăng nhập thành công, có thể chuyển hướng hoặc thực hiện các hành động khác
+                } else {
+                    // Hiển thị thông báo lỗi
+                    $("#TB").html(response.message);
+                }
+            },
+            error: function () {
+                // Xử lý lỗi nếu có
+                $("#TB").html("Đăng ký thất bại");
+            }
+        });
+    }
+
+</script>

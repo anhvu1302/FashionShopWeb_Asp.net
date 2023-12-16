@@ -1,0 +1,23 @@
+﻿@model List<FashionShopWeb.ViewModels.FavoriteProductPartialVM>
+<ul class="product-heart-box" style="display: none;">
+    <li>
+        <h1 class="title-product-heart">Sản Phẩm Yêu Thích</h1>
+    </li>
+    @foreach (var item in Model)
+    {
+        <li>
+            <div class="image">
+                <img src="~/Content/Images/@item.AnhSP" alt="">
+            </div>
+            <div class="item-description">
+                <a class="title-name" href="@Url.Action("GetSanPhamById","SanPham", new { id = item.IdSanPham})">Áo 2 dây xếp li</a>
+            </div>
+            <div class="right">
+                <p class="price">@string.Format("{0:N0}", item.Gia) đ</p>
+                <button class="remove-favorite" data-product-id = "@item.IdSanPham">
+                    <img src="https://raw.githubusercontent.com/anhvu13/fashion.github.io/main/remove.png" alt="remove">
+                </button>
+            </div>
+        </li>
+    }
+</ul>

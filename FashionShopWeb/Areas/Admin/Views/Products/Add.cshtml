@@ -1,0 +1,66 @@
+﻿@model FashionShopWeb.Areas.Admin.ViewModels.ProVM
+
+@{
+    ViewBag.Title = "AddPro";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>AddPro</h2>
+<div id="resultMessage"></div>
+@using (Html.BeginForm("AddPro", "Product", FormMethod.Post, new { id = "frmThemSanPham" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.SanPham.TenSanPham, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Tên sản phẩm</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SanPham.TenSanPham, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SanPham.TenSanPham, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.SanPham.IdLoaiSP, "Loại Sản Phẩm", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.SanPham.IdLoaiSP, new SelectList(Model.lstCatePro, "IdLoaiSP", "TenLoaiSP"), "Chọn loại sản phẩm", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SanPham.IdLoaiSP, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input id="btnThemSanPham" type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+
+    </div>
+}
+
+<div>
+    <a href="@Url.Action("AllProducts", "Products")">
+        <i class="fa-solid fa-right-to-bracket fa-rotate-180" style="color: #005eff;"></i>
+    </a>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#btnThemSanPham").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Products/AddPro",
+                data: $("#frmThemSanPham").serialize(),
+                success: function (data) {
+                    $("#resultMessage").html(data.message);
+                    if (data.success) {
+                    }
+                },
+                error: function () {
+                    $("#resultMessage").html("Đã xảy ra lỗi khi gửi dữ liệu.");
+                }
+            });
+        });
+    });
+</script>

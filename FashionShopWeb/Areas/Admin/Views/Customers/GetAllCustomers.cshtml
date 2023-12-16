@@ -1,0 +1,145 @@
+﻿@model IEnumerable<FashionShopWeb.Areas.Admin.ViewModel.CustomerVM>
+
+@{
+    ViewBag.Title = "GetAllCustomers";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="activity" id="products">
+    <div class="title">
+        <i class="uil uil-package"></i>
+        <span class="text">Danh sách khách hàng</span>
+    </div>
+    <div class="activity-data">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <td colspan="8">
+                        @using (Html.BeginForm("GetAllCustomers", "Customers", FormMethod.Post, new { id = "customer-search-form" }))
+                        {
+                            <select class="form-select" name="customerSearchType" id="customer-search-type" required>
+                                <option value="id">Tìm theo tên mã</option>
+                                <option value="name">Tìm theo tên</option>
+                                <option value="birth">Tìm theo ngày sinh</option>
+                                <option value="email">Tìm theo email</option>
+                                <option value="phoneNumber">Tìm theo số điện thoại</option>
+                            </select>
+                            <input class="form-control" type="text" placeholder="Tìm kiếm..." name="customerSearchInput" id="customer-search-input" required>
+                            <button type="submit" class="btn btn-light" id="btn-search-customer">
+                                <i class="fa fa-search" style="color: #3557ff;"></i>
+                                Tìm kiếm
+                            </button>
+                        }
+                        <button class="btn btn-light" id="btn-add-customer">
+                            <i class="fa fa-plus-square" style="color: #3557ff;"></i>
+                            Thêm sản phẩm
+                        </button>
+                    </td>
+
+                </tr>
+            </thead>
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>
+                        Tên khách hàng
+                        <div>
+                            <a href="@Url.Action("GetAllCate","Categories", new { sortCol = "CustomerName",sortType = "DESC", page = ViewBag.Page})" class="fa fa-solid fa-sort-up"></a>
+                            <a href="@Url.Action("GetAllCate","Categories", new { sortCol = "CustomerName",sortType = "ASC", page = ViewBag.Page})" class="fa fa-solid fa-sort-down"></a>
+                        </div>
+                    </th>
+                    <th>
+                        Ngày sinh
+                        <div>
+                            <a href="@Url.Action("GetAllCate","Categories", new { sortCol = "Birth",sortType = "DESC", page = ViewBag.Page})" class="fa fa-solid fa-sort-up"></a>
+                            <a href="@Url.Action("GetAllCate","Categories", new { sortCol = "Birth",sortType = "ASC", page = ViewBag.Page})" class="fa fa-solid fa-sort-down"></a>
+                        </div>
+                    </th>
+                    <th>
+                        Giới tính
+                        <div>
+                            <a href="@Url.Action("GetAllCate","Categories", new { sortCol = "Gender",sortType = "DESC", page = ViewBag.Page})" class="fa fa-solid fa-sort-up"></a>
+                            <a href="@Url.Action("GetAllCate","Categories", new { sortCol = "Gender",sortType = "ASC", page = ViewBag.Page})" class="fa fa-solid fa-sort-down"></a>
+                        </div>
+                    </th>
+                    <th>
+                        Địa chỉ
+                    </th>
+                    <th>
+                        Số điện thoại
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody id="product-table-body">
+                @{ int stt = ViewBag.STT;}
+                @foreach (var item in Model)
+                {
+
+                <tr>
+                    <td>@(stt++)</td>
+
+                    <td>
+                        @item.customer.TenKhachHang
+                    </td>
+                    <td>
+                        @string.Format("{0:dd/MM/yyyy}", item.customer.NgaySinh)
+                    </td>
+                    <td>
+                        @item.customer.GioiTinh
+                    </td>
+                    <td>
+                        @item.customer.DiaChi
+                    </td>
+                    <td>
+                        @item.customer.SoDienThoai
+                    </td>
+                    <td>
+                        @item.customer.Email
+                    </td>
+                    <td>
+                        <button type="button" class="edit-product-btn" data-product-id="@item.customer.IdKhachHang"><i class="fa fa-wrench"></i></button>
+                        <button type="button" class="delete-product-btn" data-product-id="@item.customer.IdKhachHang"><i class="fa fa-trash"></i></button>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    @if (ViewBag.NoOfPages > 1)
+    {
+        <div class="break-page">
+            @{
+                int PrevPage = ViewBag.Page - 1;
+                if (PrevPage <= 0)
+                {
+                    PrevPage = 1;
+                }
+                int NextPage = ViewBag.Page + 1;
+                if (NextPage >= ViewBag.NoOfPages)
+                {
+                    NextPage = ViewBag.NoOfPages;
+                }
+            }
+            <div><a class="buttons prev-button" href="@Url.Action("GetAllCate","Categories")/?page=@PrevPage">&lt;&lt;</a></div>
+            @for (int i = 0; i < ViewBag.NoOfPages; i++)
+            {
+                if (i + 1 == ViewBag.Page)
+                {
+                    <div>
+                        <a href="@Url.Action("GetAllCustomers","Customers")/?page=@(i+1)" class="buttons active">@(i+1)</a>
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        <a href="@Url.Action("GetAllCustomers","Customers")/?page=@(i+1)" class="buttons">@(i+1)</a>
+                    </div>
+                }
+            }
+            <div><a class="buttons next-button" href="@Url.Action("GetAllCustomers","Customers")/?page=@NextPage">&gt;&gt;</a></div>
+        </div>
+    }
+</div>

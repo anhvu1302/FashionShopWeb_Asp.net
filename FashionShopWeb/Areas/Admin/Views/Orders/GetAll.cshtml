@@ -1,0 +1,140 @@
+﻿@model IEnumerable<FashionShopWeb.ViewModels.DonHangVM>
+
+@{
+    ViewBag.Title = "Quản Lý Đơn Hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="activity" id="orders">
+    <div class="title">
+        <i class="uil uil-package"></i>
+        <span class="text">Danh sách đơn hàng</span>
+    </div>
+    <div class="activity-data">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <td colspan="7">
+                        <select class="form-select" name="order-search-type" id="order-search-type">
+                            <option value="id">Tìm theo mã</option>
+                            <option value="name-customer">Tìm theo mã khách hàng</option>
+                            <option value="status">Tìm theo trạng thái</option>
+                        </select>
+                        <input class="form-control" type="text" placeholder="Tìm kiếm..." id="order-search-input">
+                        <button class="btn btn-light" id="btn-add-order">
+                            <i class="fa fa-plus-square" style="color: #3557ff;"></i>
+                            Thêm đơn hàng
+                        </button>
+                    </td>
+                </tr>
+            </thead>
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>ID Đơn Hàng</th>
+                    <th>
+                        Id Khách Hàng
+                        <div>
+                            <a href="@Url.Action("GetAll","Orders", new { sortCol = "IdKhachHang",sortType = "DESC", page = ViewBag.Page})" class="fa fa-solid fa-sort-up"></a>
+                            <a href="@Url.Action("GetAll","Orders", new { sortCol = "IdKhachHang",sortType = "ASC", page = ViewBag.Page})" class="fa fa-solid fa-sort-down"></a>
+                        </div>
+                    </th>
+                    <th>Sản phẩm</th>
+                    <th>
+                        Tổng tiền
+                        <div>
+                            <a href="@Url.Action("GetAll","Orders", new { sortCol = "TongTien",sortType = "DESC", page = ViewBag.Page})" class="fa fa-solid fa-sort-up"></a>
+                            <a href="@Url.Action("GetAll","Orders", new { sortCol = "TongTien",sortType = "ASC", page = ViewBag.Page})" class="fa fa-solid fa-sort-down"></a>
+                        </div>
+                    </th>
+                    <th>
+                        Thời gian đặt hàng
+                        <div>
+                            <a href="@Url.Action("GetAll","Orders", new { sortCol = "ThoiGianDat",sortType = "DESC", page = ViewBag.Page})" class="fa fa-solid fa-sort-up"></a>
+                            <a href="@Url.Action("GetAll","Orders", new { sortCol = "ThoiGianDat",sortType = "ASC", page = ViewBag.Page})" class="fa fa-solid fa-sort-down"></a>
+                        </div>
+                    </th>
+                    <th>Thời gian giao hàng dự kiến</th>
+                    <th>
+                        Trạng thái
+                        <div>
+                            <a href="@Url.Action("GetAll","Orders", new { sortCol = "TrangThai",sortType = "DESC", page = ViewBag.Page})" class="fa fa-solid fa-sort-up"></a>
+                            <a href="@Url.Action("GetAll","Orders", new { sortCol = "TrangThai",sortType = "ASC", page = ViewBag.Page})" class="fa fa-solid fa-sort-down"></a>
+                        </div>
+                    </th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody id="orders-table-body">
+                @{ int stt = ViewBag.STT;}
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td>@(stt++)</td>
+                        <td>@order.DonHang.IdDonHang</td>
+                        <td>@order.DonHang.IdKhachHang</td>
+                        <td>
+                            @foreach (var item in order.ListChiTietDonHang)
+                            {
+                                <p>
+                                    <a href="@Url.Action("GetSanPhamById", "SanPham", new { area = "", id = item.IdSanPham })" target="_blank" style="margin-bottom: auto;">
+                                        @item.IdSanPham
+                                        <img src="">
+                                    </a>
+                                    <strong>[@item.SoLuong]</strong>
+                                </p>
+                            }
+                        </td>
+                        <td>@string.Format("{0:N0}", order.TongTien) đ</td>
+                        <td>@order.DonHang.ThoiGianDatHang</td>
+                        <td>@order.DonHang.ThoiGianGiaoHangDuKien</td>
+                        <td>@order.DonHang.TrangThaiDonHang</td>
+                        <td>
+                            <button type="button" class="confirmOrderBtn" data-order-id="@order.DonHang.IdDonHang"><i class="fa fa-check"></i></button>
+                            <button><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    @if (ViewBag.NoOfPages > 1)
+    {
+        <div class="break-page">
+            @{
+                int PrevPage = ViewBag.Page - 1;
+                if (PrevPage <= 0)
+                {
+                    PrevPage = 1;
+                }
+                int NextPage = ViewBag.Page + 1;
+                if (NextPage >= ViewBag.NoOfPages)
+                {
+                    NextPage = ViewBag.NoOfPages;
+                }
+            }
+            <div><a class="buttons prev-button" href="@Url.Action("GetAll","Orders")/?page=@PrevPage">&lt;&lt;</a></div>
+            @for (int i = 0; i < ViewBag.NoOfPages; i++)
+            {
+                if (i + 1 == ViewBag.Page)
+                {
+                    <div>
+                        <a href="@Url.Action("GetAll","Orders")/?page=@(i+1)" class="buttons active">@(i+1)</a>
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        <a href="@Url.Action("GetAll","Orders")/?page=@(i+1)" class="buttons">@(i+1)</a>
+                    </div>
+                }
+            }
+            <div><a class="buttons next-button" href="@Url.Action("GetAll","Orders")/?page=@NextPage">&gt;&gt;</a></div>
+        </div>
+    }
+</div>
+@section PartialView{
+
+}
+@section scriptsFooter {
+    <script src="~/Areas/Admin/Scripts/ScriptOrder.js"></script>
+}

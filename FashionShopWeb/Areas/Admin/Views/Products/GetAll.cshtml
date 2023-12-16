@@ -1,0 +1,135 @@
+﻿@model IEnumerable<FashionShopWeb.ViewModels.SanPhamVM>
+
+@{
+    ViewBag.Title = "Quản Lý Sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="activity" id="products">
+    <div class="title">
+        <i class="uil uil-package"></i>
+        <span class="text">Danh sách sản phẩm</span>
+    </div>
+    <div class="activity-data">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <td colspan="8">
+                        @using (Html.BeginForm("GetAll", "Products", FormMethod.Post, new { id = "product-search-form" }))
+                        {
+                            <select class="form-select" name="productSearchType" id="product-search-type" required>
+                                <option value="name">Tìm theo tên</option>
+                            </select>
+                            <input class="form-control" type="text" placeholder="Tìm kiếm..." name="productSearchInput" id="product-search-input" required>
+                            <button type="submit" class="btn btn-light" id="btn-search-product">
+                                <i class="fa fa-search" style="color: #3557ff;"></i>
+                                Tìm kiếm
+                            </button>
+                        }
+                        <button class="btn btn-light" id="btn-add-product">
+                            <i class="fa fa-plus-square" style="color: #3557ff;"></i>
+                            Thêm sản phẩm
+                        </button>
+                    </td>
+
+                </tr>
+            </thead>
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Tên</th>
+                    <th>
+                        Giá đã giảm
+                        <div>
+                            <a href="@Url.Action("GetAll","Products", new { sortCol = "GiaDaGiam",sortType = "DESC", page = ViewBag.Page})" class="fa fa-solid fa-sort-up"></a>
+                            <a href="@Url.Action("GetAll","Products", new { sortCol = "GiaDaGiam",sortType = "ASC", page = ViewBag.Page})" class="fa fa-solid fa-sort-down"></a>
+                        </div>
+                    </th>
+                    <th>
+                        Giá gốc
+                        <div>
+                            <a href="@Url.Action("GetAll","Products", new { sortCol = "GiaGoc",sortType = "DESC", page = ViewBag.Page})" class="fa fa-solid fa-sort-up"></a>
+                            <a href="@Url.Action("GetAll","Products", new { sortCol = "GiaGoc",sortType = "ASC", page = ViewBag.Page})" class="fa fa-solid fa-sort-down"></a>
+                        </div>
+                    </th>
+                    <th>
+                        Giảm giá
+                        <div>
+                            <a href="@Url.Action("GetAll","Products", new { sortCol = "GiamGia",sortType = "DESC", page = ViewBag.Page})" class="fa fa-solid fa-sort-up"></a>
+                            <a href="@Url.Action("GetAll","Products", new { sortCol = "GiamGia",sortType = "ASC", page = ViewBag.Page})" class="fa fa-solid fa-sort-down"></a>
+                        </div>
+                    </th>
+                    <th>
+                        Số Lượng Đánh giá<div>
+                            <a href="@Url.Action("GetAll","Products", new { sortCol = "SoLuongDanhGia",sortType = "DESC", page = ViewBag.Page})" class="fa fa-solid fa-sort-up"></a>
+                            <a href="@Url.Action("GetAll","Products", new { sortCol = "SoLuongDanhGia",sortType = "ASC", page = ViewBag.Page})" class="fa fa-solid fa-sort-down"></a>
+                        </div>
+                    </th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody id="product-table-body">
+                @{ int stt = ViewBag.STT;}
+                @foreach (var item in Model)
+                {
+
+                    <tr>
+                        <td>@(stt++)</td>
+                        <td>
+                            <a href="@Url.Action("GetSanPhamById", "SanPham", new { area = "", id = item.SanPham.IdSanPham })" target="_blank">@item.SanPham.TenSanPham</a>
+                            <img src="~/Content/Images/@item.SanPham.AnhSP" alt="">
+                        </td>
+                        <td>@string.Format("{0:N0}", item.Gia) đ</td>
+                        <td>@string.Format("{0:N0}", item.SanPham.GiaBan) đ</td>
+                        <td>@item.SanPham.GiamGia%</td>
+                        <td>@item.SanPham.SoLuongDanhGia</td>
+                        <td>
+                            <button type="button" class="edit-product-btn" data-product-id="@item.SanPham.IdSanPham"><i class="fa fa-wrench"></i></button>
+                            <button type="button" class="delete-product-btn" data-product-id="@item.SanPham.IdSanPham"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    @if (ViewBag.NoOfPages > 1)
+    {
+        <div class="break-page">
+            @{
+                int PrevPage = ViewBag.Page - 1;
+                if (PrevPage <= 0)
+                {
+                    PrevPage = 1;
+                }
+                int NextPage = ViewBag.Page + 1;
+                if (NextPage >= ViewBag.NoOfPages)
+                {
+                    NextPage = ViewBag.NoOfPages;
+                }
+            }
+            <div><a class="buttons prev-button" href="@Url.Action("GetAll","Products")/?page=@PrevPage">&lt;&lt;</a></div>
+            @for (int i = 0; i < ViewBag.NoOfPages; i++)
+            {
+                if (i + 1 == ViewBag.Page)
+                {
+                    <div>
+                        <a href="@Url.Action("GetAll","Products")/?page=@(i+1)" class="buttons active">@(i+1)</a>
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        <a href="@Url.Action("GetAll","Products")/?page=@(i+1)" class="buttons">@(i+1)</a>
+                    </div>
+                }
+            }
+            <div><a class="buttons next-button" href="@Url.Action("GetAll","Products")/?page=@NextPage">&gt;&gt;</a></div>
+        </div>
+    }
+</div>
+@section PartialView{
+    @Html.Action("AddPartial", "Products")
+    @Html.Action("EditPartial", "Products")
+}
+@section scriptsFooter {
+    <script src="~/Areas/Admin/Scripts/ScriptProduct.js"></script>
+}

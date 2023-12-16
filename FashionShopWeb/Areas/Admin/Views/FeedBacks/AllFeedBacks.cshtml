@@ -1,0 +1,58 @@
+﻿@model IEnumerable<FashionShopWeb.Models.PhanHoi>
+
+@{
+    ViewBag.Title = "Phản hồi";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<p>
+    <h2>Tất cả phản hồi của khác hàng</h2>
+</p>
+<table class="table table-striped">
+    <thead class="table-light">
+        <tr>
+            <th>
+                Mã khách hàng
+            </th>
+            <th>
+                Số điện thoại
+            </th>
+            <th>
+                Vấn đề
+            </th>
+            <th>
+                Nội dung
+            </th>
+            <th>
+                Thời gian
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdKhachHang)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SoDienThoai)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VanDe)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NoiDungVanDe)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ThoiGianPhanHoi)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.IdPhanHoi }) |
+                @Html.ActionLink("Details", "Details", new { id = item.IdPhanHoi }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.IdPhanHoi })
+            </td>
+        </tr>
+    }
+
+</table>

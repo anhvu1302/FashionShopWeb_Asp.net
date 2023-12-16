@@ -1,0 +1,89 @@
+﻿@model FashionShopWeb.Models.SanPham
+<div class="add-product">
+    <div class="close-btn">×</div>
+    <div class="container" id="container">
+        @using (Html.BeginForm("", "", FormMethod.Post, new { id = "add-product-form" }))
+        {
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TenSanPham, "Tên sản phẩm:")
+                        @Html.TextBoxFor(model => model.TenSanPham, new { @class = "form-control", required = "required" })
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="parent-product-type">Loại sản phẩm cha:</label>
+                        @Html.DropDownList("parentProductType", (List<SelectListItem>)ViewBag.SPLoaiCha, "Select an option", new { @class = "form-control", required = "required", id = "parentProductTypeDropdown", value = "1" })
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="clothes-style">Loại sản phẩm:</label>
+                        @Html.DropDownListFor(model => model.IdLoaiSP, new List<SelectListItem> { new SelectListItem { Text = "Select an option", Value = "" } }, new { @class = "form-control", required = "required", id = "clothes-style" })
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.GiaBan, "Giá:")
+                        @Html.TextBoxFor(model => model.GiaBan, new { @class = "form-control", required = "required" })
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.GiamGia, "Khuyến mãi (%):")
+                        @Html.TextBoxFor(model => model.GiamGia, new { @class = "form-control", type = "number", min = "0", max = "100", value = "0", required = "required" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AnhSP, "Đường dẫn ảnh:")
+                        @Html.TextBoxFor(model => model.AnhSP, new { @class = "form-control", required = "required" })
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AnhSPChiTiet1, "Đường dẫn ảnh chi tiết 1:")
+                        @Html.TextBoxFor(model => model.AnhSPChiTiet1, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AnhSPChiTiet2, "Đường dẫn ảnh chi tiết 2:")
+                        @Html.TextBoxFor(model => model.AnhSPChiTiet2, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NoiDungSanPham, "Thông tin sản phẩm:")
+                    @Html.TextAreaFor(model => model.NoiDungSanPham, new { @class = "form-control", rows = "3" })
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DanhGiaSanPham, "Đánh giá sản phẩm:")
+                    @Html.TextAreaFor(model => model.DanhGiaSanPham, new { @class = "form-control", rows = "3" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ThanhToanVanChuyen, "Thanh toán và vận chuyển:")
+                    @Html.TextAreaFor(model => model.ThanhToanVanChuyen, new { @class = "form-control", rows = "3" })
+                </div>
+            </div>
+            <div class="row" style="margin-top: 1rem;">
+                <button type="submit" class="btn btn-primary" style="width: 35%;margin: auto;">Thêm sản phẩm</button>
+            </div>
+        }
+    </div>
+</div>
+@section scriptsFooter {
+    <script src="~/Areas/Admin/Scripts/ScriptProduct.js"></script>
+}
